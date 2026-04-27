@@ -15,6 +15,7 @@
 git clone https://github.com/chhavithakur15/SPLISUM.git
 cd SPLISUM
 pip install -e .
+```
 ---
 
 ## Overview
