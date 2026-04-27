@@ -246,35 +246,35 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ---
 
-## Pipeline Diagram
+## Pipeline
 
 ```mermaid
-flowchart TD
+flowchart TB
 
-A["Raw MGF Library"] --> B["Standardization"]
-B --> C["Filtering: Ion Mode and 20 eV"]
+A["Raw MGF<br/>Library"] --> B["MGF<br/>Standardization"]
+B --> C["Filter by<br/>Ion Mode and 20 eV"]
 
-C --> D["50 ppm Precursor Mass Binning"]
-D --> E["msCRUSH Clustering"]
-E --> F["Decoy Generation"]
+C --> D["50 ppm<br/>Precursor Mass Binning"]
+D --> E["msCRUSH<br/>Clustering"]
+E --> F["Decoy<br/>Generation"]
 
-C --> G["Target Library"]
-F --> H["Decoy Library"]
+C --> G["Target<br/>Library"]
+F --> H["Decoy<br/>Library"]
 
-G --> I["Combine Target and Decoy Libraries"]
+G --> I["Combine Target<br/>and Decoy Libraries"]
 H --> I
 
-I --> J["Combined Target-Decoy Library"]
+I --> J["Combined Target-Decoy<br/>Search Library"]
 
-J --> K["msSLASH Spectral Search"]
-L["Query MGF"] --> K
+J --> K["msSLASH<br/>Spectral Search"]
+L["Query<br/>MGF"] --> K
 
-K --> M["Search Results"]
+K --> M["Search<br/>Results"]
 
-M --> N["Estimated FDR"]
-M --> O["Prepare MCES Input"]
+M --> N["Estimated<br/>FDR"]
+M --> O["Prepare<br/>MCES Input"]
 
-O --> P["Actual FDR"]
+O --> P["Actual<br/>FDR"]
 
-N --> Q["FDR Comparison"]
+N --> Q["Estimated vs Actual<br/>FDR Comparison"]
 P --> Q
