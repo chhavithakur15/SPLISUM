@@ -248,33 +248,68 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ## Pipeline
 
-```mermaid
-flowchart TB
+┌───────────────────────────────┐
+│        Raw MGF Library        │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│     MGF Standardization       │
+│ (PEPMASS, CHARGE, PRECURSOR) │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│   Filtering: Ion Mode + 20 eV │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│ 50 ppm Precursor Mass Binning │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│      msCRUSH Clustering       │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│       Decoy Generation        │
+│ (Mass reshuffling across bins)│
+└───────────────┬───────────────┘
+                ↓
+        ┌───────┴────────┐
+        ↓                ↓
+┌───────────────┐ ┌───────────────┐
+│ Target Library│ │ Decoy Library │
+└───────┬───────┘ └───────┬───────┘
+        └───────┬────────┘
+                ↓
+┌───────────────────────────────┐
+│ Combined Target–Decoy Library │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│     msSLASH Spectral Search   │
+│ (Query vs Combined Library)   │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│        Search Results         │
+│ (TopMatch, TopScore, TopPep) │
+└───────────────┬───────────────┘
+                ↓
+        ┌───────┴────────┐
+        ↓                ↓
+┌───────────────┐ ┌───────────────┐
+│ Estimated FDR │ │  MCES Analysis│
+│ (#Decoy/Target)││ Edit Similarity│
+└───────┬───────┘ └───────┬───────┘
+        └───────┬────────┘
+                ↓
+┌───────────────────────────────┐
+│          Actual FDR           │
+│ (Not Identical / Total)       │
+└───────────────┬───────────────┘
+                ↓
+┌───────────────────────────────┐
+│        FDR Comparison         │
+│   (Estimated vs Actual)       │
+└───────────────────────────────┘
 
-A["Raw MGF<br/>Library"] --> B["MGF<br/>Standardization"]
-B --> C["Filter by<br/>Ion Mode and 20 eV"]
-
-C --> D["50 ppm<br/>Precursor Mass Binning"]
-D --> E["msCRUSH<br/>Clustering"]
-E --> F["Decoy<br/>Generation"]
-
-C --> G["Target<br/>Library"]
-F --> H["Decoy<br/>Library"]
-
-G --> I["Combine Target<br/>and Decoy Libraries"]
-H --> I
-
-I --> J["Combined Target-Decoy<br/>Search Library"]
-
-J --> K["msSLASH<br/>Spectral Search"]
-L["Query<br/>MGF"] --> K
-
-K --> M["Search<br/>Results"]
-
-M --> N["Estimated<br/>FDR"]
-M --> O["Prepare<br/>MCES Input"]
-
-O --> P["Actual<br/>FDR"]
-
-N --> Q["Estimated vs Actual<br/>FDR Comparison"]
-P --> Q
