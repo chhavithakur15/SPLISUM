@@ -246,35 +246,35 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ---
 
-
 ## Pipeline Diagram
 
 ```mermaid
 flowchart TD
 
-A[Raw MGF Library] --> B[Standardization]
-B --> C[Filtering: Ion Mode and 20 eV]
-C --> D[50 ppm Binning]
-D --> E[msCRUSH Clustering]
-E --> F[Decoy Generation]
+A["Raw MGF Library"] --> B["Standardization"]
+B --> C["Filtering: Ion Mode and 20 eV"]
 
-C --> G[Target Library]
-F --> H[Decoy Library]
+C --> D["50 ppm Precursor Mass Binning"]
+D --> E["msCRUSH Clustering"]
+E --> F["Decoy Generation"]
 
-G --> I[Combine Target and Decoy]
+C --> G["Target Library"]
+F --> H["Decoy Library"]
+
+G --> I["Combine Target and Decoy Libraries"]
 H --> I
 
-I --> J[Combined Target Decoy Library]
+I --> J["Combined Target-Decoy Library"]
 
-J --> K[msSLASH Search]
-L[Query MGF] --> K
+J --> K["msSLASH Spectral Search"]
+L["Query MGF"] --> K
 
-K --> M[Search Results]
+K --> M["Search Results"]
 
-M --> N[Estimated FDR]
-M --> O[Prepare MCES Input]
+M --> N["Estimated FDR"]
+M --> O["Prepare MCES Input"]
 
-O --> P[Actual FDR]
+O --> P["Actual FDR"]
 
-N --> Q[FDR Comparison]
+N --> Q["FDR Comparison"]
 P --> Q
