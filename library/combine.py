@@ -32,6 +32,17 @@ def merge_mgf_folder(input_folder, output_file, title_label=None):
     print(f"Merged MGF written to: {output_file}")
 
 
+def merge_mgf_files(input_files, output_file):
+    with open(output_file, "w") as out:
+        for path in input_files:
+            with open(path, "r") as f:
+                for line in f:
+                    out.write(line)
+                out.write("\n")
+
+    print(f"Merged MGF files written to: {output_file}")
+
+
 def combine_target_decoy(target_folder, decoy_folder, output_file):
     with open(output_file, "w") as out:
         for folder, label in [
@@ -67,6 +78,10 @@ if __name__ == "__main__":
     merge_parser.add_argument("--output", required=True)
     merge_parser.add_argument("--title_label", default=None)
 
+    merge_files_parser = subparsers.add_parser("merge-files")
+    merge_files_parser.add_argument("--inputs", nargs="+", required=True)
+    merge_files_parser.add_argument("--output", required=True)
+
     combine_parser = subparsers.add_parser("combine-target-decoy")
     combine_parser.add_argument("--target_folder", required=True)
     combine_parser.add_argument("--decoy_folder", required=True)
@@ -79,6 +94,12 @@ if __name__ == "__main__":
             input_folder=args.input_folder,
             output_file=args.output,
             title_label=args.title_label,
+        )
+
+    elif args.command == "merge-files":
+        merge_mgf_files(
+            input_files=args.inputs,
+            output_file=args.output,
         )
 
     elif args.command == "combine-target-decoy":
