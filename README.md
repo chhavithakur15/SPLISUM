@@ -7,11 +7,17 @@
 
 **SPLISUM** (Spectral Prediction and Library Searching for Untargeted Metabolomics) is a Python package for metabolite identification using predicted spectral libraries, target–decoy-based false discovery rate (FDR) estimation, structural validation, and cluster-aware analysis.
 
+## Installation
+
+```bash
+git clone https://github.com/chhavithakur15/SPLISUM.git
+cd SPLISUM
+pip install -e .
 ---
 
 ## Overview
 
-SPLISUM provides an end-to-end workflow:
+SPLISUM provides an end-to-end workflow: https://github.com/chhavithakur15/SPLISUM.git
 
 - MGF preprocessing and standardization  
 - Ion-mode and collision-energy filtering  
