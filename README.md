@@ -27,15 +27,22 @@ SPLISUM provides an end-to-end workflow:
 
 ## External Dependencies
 
-SPLISUM requires:
+SPLISUM requires msSLASH and msCRUSH.
 
-- **msSLASH** (spectral search)  
-- **msCRUSH** (clustering)
+Install them using:
 
-Provide paths when running:
+git clone https://github.com/COL-IU/msSLASH.git  
+cd msSLASH  
+./install.sh  
 
-    --msslash_path /path/to/bruteforce
-    --mscrush_path /path/to/mscrush
+git clone https://github.com/COL-IU/msCRUSH.git  
+cd msCRUSH  
+./install.sh  
+
+After installation, provide paths to executables:
+
+--msslash_path /path/to/msSLASH/bin/bruteforce  
+--mscrush_path /path/to/msCRUSH/bin/mscrush  
 
 ---
 
