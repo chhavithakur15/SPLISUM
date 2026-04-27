@@ -66,7 +66,7 @@ After installation, provide paths to executables:
 
 Standardizes metadata fields such as `PEPMASS`, `PRECURSOR_MZ`, and `CHARGE`.
 
-Why: Ensures compatibility with downstream tools like msSLASH.
+Reason: Ensures compatibility with downstream tools like msSLASH.
 
     python -m splisum.io.mgf \
       --input input_library.mgf \
@@ -82,7 +82,7 @@ Filters spectra to retain only:
 - Negative mode: `[M-H]-`  
 - Collision energy: **20 eV**
 
-Why: Fragmentation patterns depend on acquisition conditions; mixing them reduces match quality.
+Reason: Fragmentation patterns depend on acquisition conditions; mixing them reduces match quality.
 
     python -m splisum.library.filter \
       --input standardized_library.mgf \
@@ -96,7 +96,7 @@ Why: Fragmentation patterns depend on acquisition conditions; mixing them reduce
 
 Groups spectra into precursor-mass bins using a 50 ppm constraint.
 
-Why: Prevents loose grouping and preserves realistic mass structure.
+Reason: Prevents loose grouping and preserves realistic mass structure.
 
     python -m splisum.library.binning \
       --input positive_20ev.mgf \
@@ -109,7 +109,7 @@ Why: Prevents loose grouping and preserves realistic mass structure.
 
 Clusters spectra to generate representative spectra and reduce redundancy.
 
-Why: Improves library organization and stabilizes downstream decoy generation.
+Reason: Improves library organization and stabilizes downstream decoy generation.
 
     python -m splisum.clustering.mscrush \
       --mscrush_path /path/to/mscrush \
@@ -126,7 +126,7 @@ Why: Improves library organization and stabilizes downstream decoy generation.
 
 Generates decoy spectra by reassigning precursor masses across nearby bins while keeping fragment peaks unchanged.
 
-Why: Produces realistic incorrect matches required for FDR estimation.
+Reason: Produces realistic incorrect matches required for FDR estimation.
 
     python -m splisum.decoy.generate \
       --input_folder binned_spectra \
@@ -146,28 +146,41 @@ Combines all decoy spectra into a single file.
 
 ---
 
-### Step 7: Spectral Search (msSLASH)
+### Step 7: Build Combined Target–Decoy Library
 
-Matches query spectra against both target and decoy libraries.
+Combines the target spectra and generated decoy spectra into a single searchable library.
 
-Why: Core identification step.
+Reason: SPLISUM performs msSLASH search on a unified library containing both target and decoy entries.
+
+    python -m splisum.library.combine \
+      merge-files \
+      --inputs positive_20ev.mgf decoy_library.mgf \
+      --output combined_target_decoy_library.mgf
+
+---
+
+### Step 8: Spectral Search (msSLASH)
+
+Searches query spectra against the combined target–decoy library.
+
+Reason: The decoy spectra are already merged into the target library before search.  
+The `-d` argument uses a dummy MGF file internally because msSLASH requires it.
 
     python -m splisum.search.msslash \
       --msslash_path /path/to/bruteforce \
-      --library positive_20ev.mgf \
+      --library combined_target_decoy_library.mgf \
       --query query.mgf \
-      --decoy decoy_library.mgf \
       --output msslash_output.txt
 
 ---
 
-### Step 8: Estimated FDR
+### Step 9: Estimated FDR
 
 Estimated FDR is computed as:
 
     Estimated FDR = (# Decoy Hits) / (# Target Hits)
 
-Why: Provides a fast statistical estimate of false positives.
+Reason: Provides a fast statistical estimate of false positives.
 
     python -m splisum.fdr.estimated \
       --input msslash_output.txt \
@@ -175,11 +188,11 @@ Why: Provides a fast statistical estimate of false positives.
 
 ---
 
-### Step 9: Prepare Input for Actual FDR
+### Step 10: Prepare Input for Actual FDR
 
 Maps query and target compounds and computes edit similarity (MCES).
 
-Why: Enables structure-based validation of matches.
+Reason: Enables structure-based validation of matches.
 
     python -m splisum.fdr.prepare_actual_fdr_input \
       --msslash_txt msslash_output.txt \
@@ -190,7 +203,7 @@ Why: Enables structure-based validation of matches.
 
 ---
 
-### Step 10: Actual FDR Calculation
+### Step 11: Actual FDR Calculation
 
 Classifies matches into:
 
@@ -203,7 +216,7 @@ Actual FDR is computed as:
 
     Actual FDR = Not Identical / Total
 
-Why: Measures true correctness using structural similarity.
+Reason: Measures true correctness using structural similarity.
 
     python -m splisum.fdr.actual_fdr \
       --input actual_fdr_input.xlsx \
@@ -211,11 +224,11 @@ Why: Measures true correctness using structural similarity.
 
 ---
 
-### Step 11: Compare Estimated vs Actual FDR
+### Step 12: Compare Estimated vs Actual FDR
 
 Generates comparison table and visualization.
 
-Why: Highlights the gap between statistical and structural validation.
+Reason: Highlights the gap between statistical and structural validation.
 
     python -m splisum.postprocess.compare_fdr \
       --estimated estimated_fdr.xlsx \
@@ -225,7 +238,7 @@ Why: Highlights the gap between statistical and structural validation.
 
 ---
 
-## Key Insight
+## Important Note 
 
 Estimated FDR < Actual FDR
 
