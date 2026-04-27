@@ -246,44 +246,51 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ---
 
-
 ## Pipeline
 
 ```mermaid
 flowchart LR
 
-A["Raw MGF<br/>Library"] --> B["Standardize<br/>MGF"]
-B --> C["Filter<br/>20 eV + Ion Mode"]
-C --> D["Bin by<br/>50 ppm Mass"]
-D --> E["msCRUSH<br/>Clustering"]
-E --> F["Generate<br/>Decoys"]
+A["Raw MGF"] --> B["Standardize"]
+B --> C["Filter"]
+C --> D["Bin (50 ppm)"]
+D --> E["msCRUSH"]
+E --> F["Decoys"]
 
-F --> G["Target<br/>Library"]
-F --> H["Decoy<br/>Library"]
+F --> G["Target"]
+F --> H["Decoy"]
 
-G --> I["Combined<br/>Target-Decoy Library"]
+G --> I["Combined"]
 H --> I
 
-I --> J["msSLASH<br/>Search"]
-J --> K["Search<br/>Results"]
+I --> J["msSLASH"]
+J --> K["Results"]
 
-K --> L["Estimated<br/>FDR"]
-K --> M["MCES<br/>Analysis"]
+K --> L["Est. FDR"]
+K --> M["MCES"]
 
-L --> N["Actual<br/>FDR"]
+L --> N["Actual FDR"]
 M --> N
 
-N --> O["FDR<br/>Comparison"]
+N --> O["Compare"]
 ```
 
-### Pipeline details
+### Details
 
-- **Standardize MGF:** PEPMASS, CHARGE, PRECURSOR TYPE  
-- **Generate Decoys:** mass reshuffling across bins  
-- **msSLASH Search:** query spectra vs combined target-decoy library  
-- **Search Results:** TopMatch, TopScore, TopPep  
-- **Estimated FDR:** Decoy hits / Target hits  
-- **MCES Analysis:** Edit Similarity  
-- **Actual FDR:** Not Identical / Total  
-- **FDR Comparison:** Estimated vs Actual
+- **Raw MGF** → Input spectral library  
+- **Standardize** → PEPMASS, CHARGE, PRECURSOR TYPE  
+- **Filter** → Ion mode + 20 eV  
+- **Bin (50 ppm)** → Precursor mass binning  
+- **msCRUSH** → Spectral clustering  
+- **Decoys** → Mass reshuffling across bins  
+
+- **Target / Decoy** → Library split  
+- **Combined** → Target–decoy library  
+- **msSLASH** → Query vs combined search  
+- **Results** → TopMatch, TopScore, TopPep  
+
+- **Est. FDR** → Decoy / Target  
+- **MCES** → Edit similarity  
+- **Actual FDR** → Not identical / total  
+- **Compare** → Estimated vs actual
 
