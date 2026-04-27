@@ -245,52 +245,52 @@ Estimated FDR < Actual FDR
 Estimated FDR is based on decoy matches, whereas actual FDR reflects structural correctness.
 
 ---
-
 ## Pipeline
 
 ```mermaid
-flowchart LR
+flowchart TD
+    A[Raw MGF]
+    B[Standardize]
+    C[Filter]
+    D[Bin 50 ppm]
+    E[msCRUSH]
+    F[Generate Decoys]
+    G[Target]
+    H[Decoy]
+    I[Combined Library]
+    J[msSLASH Search]
+    K[Results]
+    L[Estimated FDR]
+    M[MCES]
+    N[Actual FDR]
+    O[FDR Comparison]
 
-A["Raw MGF"] --> B["Standardize"]
-B --> C["Filter"]
-C --> D["Bin (50 ppm)"]
-D --> E["msCRUSH"]
-E --> F["Decoys"]
-
-F --> G["Target"]
-F --> H["Decoy"]
-
-G --> I["Combined"]
-H --> I
-
-I --> J["msSLASH"]
-J --> K["Results"]
-
-K --> L["Est. FDR"]
-K --> M["MCES"]
-
-L --> N["Actual FDR"]
-M --> N
-
-N --> O["Compare"]
+    A --> B --> C --> D --> E --> F
+    F --> G
+    F --> H
+    G --> I
+    H --> I
+    I --> J --> K
+    K --> L
+    K --> M
+    L --> N
+    M --> N
+    N --> O
 ```
 
-### Details
+### Pipeline details
 
-- **Raw MGF** → Input spectral library  
-- **Standardize** → PEPMASS, CHARGE, PRECURSOR TYPE  
-- **Filter** → Ion mode + 20 eV  
-- **Bin (50 ppm)** → Precursor mass binning  
-- **msCRUSH** → Spectral clustering  
-- **Decoys** → Mass reshuffling across bins  
-
-- **Target / Decoy** → Library split  
-- **Combined** → Target–decoy library  
-- **msSLASH** → Query vs combined search  
-- **Results** → TopMatch, TopScore, TopPep  
-
-- **Est. FDR** → Decoy / Target  
-- **MCES** → Edit similarity  
-- **Actual FDR** → Not identical / total  
-- **Compare** → Estimated vs actual
+- **Raw MGF:** input spectral library
+- **Standardize:** PEPMASS, CHARGE, PRECURSOR TYPE
+- **Filter:** ion mode + 20 eV
+- **Bin 50 ppm:** precursor mass binning
+- **msCRUSH:** spectral clustering
+- **Generate Decoys:** mass reshuffling across bins
+- **Combined Library:** target + decoy library
+- **msSLASH Search:** query vs combined library
+- **Results:** TopMatch, TopScore, TopPep
+- **Estimated FDR:** decoy hits / target hits
+- **MCES:** edit similarity
+- **Actual FDR:** not identical / total
+- **FDR Comparison:** estimated vs actual
 
