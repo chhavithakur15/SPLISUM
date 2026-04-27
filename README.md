@@ -246,52 +246,43 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ---
 
+## Pipeline
 
-<h2>Pipeline</h2>
+```mermaid
+flowchart TD
 
-<table>
-<tr><td align="center"><b>Raw MGF Library</b></td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>MGF Standardization</b><br>PEPMASS, CHARGE, PRECURSOR TYPE</td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>Filtering</b><br>Ion Mode + 20 eV</td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>50 ppm Precursor Mass Binning</b></td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>msCRUSH Clustering</b></td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>Decoy Generation</b><br>Mass reshuffling across bins</td></tr>
-<tr><td align="center">⬇</td></tr>
-</table>
+%% Styling for bigger boxes
+classDef big fill:#f9f9ff,stroke:#6c63ff,stroke-width:1px,font-size:14px;
 
-<table>
-<tr>
-<td align="center"><b>Target Library</b></td>
-<td align="center"><b>Decoy Library</b></td>
-</tr>
-</table>
+A["Raw MGF Library"]:::big
+B["MGF Standardization<br/>PEPMASS, CHARGE,<br/>PRECURSOR TYPE"]:::big
+C["Filtering<br/>Ion Mode + 20 eV"]:::big
+D["50 ppm Precursor<br/>Mass Binning"]:::big
+E["msCRUSH Clustering"]:::big
+F["Decoy Generation<br/>Mass reshuffling<br/>across bins"]:::big
 
-<table>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>Combined Target-Decoy Library</b></td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>msSLASH Spectral Search</b><br>Query vs Combined Library</td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>Search Results</b><br>TopMatch, TopScore, TopPep</td></tr>
-<tr><td align="center">⬇</td></tr>
-</table>
+G["Target Library"]:::big
+H["Decoy Library"]:::big
 
-<table>
-<tr>
-<td align="center"><b>Estimated FDR</b><br>Decoy / Target</td>
-<td align="center"><b>MCES Analysis</b><br>Edit Similarity</td>
-</tr>
-</table>
+I["Combined Target-Decoy Library"]:::big
+J["msSLASH Spectral Search<br/>Query vs Combined Library"]:::big
+K["Search Results<br/>TopMatch, TopScore, TopPep"]:::big
 
-<table>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>Actual FDR</b><br>Not Identical / Total</td></tr>
-<tr><td align="center">⬇</td></tr>
-<tr><td align="center"><b>FDR Comparison</b><br>Estimated vs Actual</td></tr>
-</table>
+L["Estimated FDR<br/>Decoy / Target"]:::big
+M["MCES Analysis<br/>Edit Similarity"]:::big
 
+N["Actual FDR<br/>Not Identical / Total"]:::big
+O["FDR Comparison<br/>Estimated vs Actual"]:::big
+
+A --> B --> C --> D --> E --> F
+F --> G
+F --> H
+G --> I
+H --> I
+I --> J --> K
+K --> L
+K --> M
+L --> N
+M --> N
+N --> O
+```
