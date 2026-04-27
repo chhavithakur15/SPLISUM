@@ -246,6 +246,4 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ---
 
-## Pipeline
-
 ![Pipeline Diagram](IMAGE.png)
