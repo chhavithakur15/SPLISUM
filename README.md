@@ -95,7 +95,7 @@ After installation, provide paths to executables:
 
 The full dataset used in this study is publicly available on Zenodo:
 
-👉 https://doi.org/10.5281/zenodo.19810044
+https://doi.org/10.5281/zenodo.19810044
 
 ### Contents
 - Target spectral libraries (positive and negative ion modes, 20 eV)  
@@ -110,7 +110,7 @@ mkdir data
 # move downloaded files here
 ```
 
-Then run the pipeline as described above using the downloaded files.
+Then run the pipeline as described below using the downloaded files.
 
 ---
 
