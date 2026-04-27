@@ -34,6 +34,42 @@ SPLISUM provides an end-to-end workflow: https://github.com/chhavithakur15/SPLIS
 
 ---
 
+## Example Usage
+
+A small example dataset is provided in the `examples/` folder to demonstrate how to run SPLISUM on positive and negative ion-mode data.
+
+### Run the positive-mode example
+
+```bash
+bash examples/run_example_positive.sh
+```
+
+### Run the negative-mode example
+
+```bash
+bash examples/run_example_negative.sh
+```
+
+### Run the pipeline directly
+
+```bash
+python -m splisum.workflow.run_pipeline \
+  --input_library examples/data/sample_library_positive.mgf \
+  --query_mgf examples/data/sample_query_positive.mgf \
+  --target_library_excel examples/data/sample_target_metadata.csv \
+  --msslash_path /path/to/msSLASH/bin/bruteforce \
+  --mscrush_path /path/to/msCRUSH/bin/mscrush \
+  --outdir examples/results
+```
+
+### Notes
+
+- The example files are intentionally small and are meant only for testing the workflow.
+- Replace `/path/to/msSLASH/bin/bruteforce` and `/path/to/msCRUSH/bin/mscrush` with the actual paths on your system.
+- For full experiments, use the complete target library, query spectra, and metadata files.
+
+---
+
 ## External Dependencies
 
 SPLISUM requires msSLASH and msCRUSH.
