@@ -11,7 +11,7 @@ def run_command(cmd):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run the minimal SPLISUM target-decoy FDR workflow."
+        description="Run the SPLISUM target-decoy FDR workflow."
     )
 
     parser.add_argument("--input_library", required=True)
@@ -25,9 +25,11 @@ def main():
 
     binned_dir = f"{args.outdir}/binned_spectra"
     decoy_dir = f"{args.outdir}/decoy_spectra"
-    decoy_library = f"{args.outdir}/decoy_library.mgf"
-    msslash_output = f"{args.outdir}/msslash_output.txt"
 
+    decoy_library = f"{args.outdir}/decoy_library.mgf"
+    combined_library = f"{args.outdir}/combined_target_decoy_library.mgf"
+
+    msslash_output = f"{args.outdir}/msslash_output.txt"
     estimated_fdr = f"{args.outdir}/estimated_fdr.xlsx"
     actual_input = f"{args.outdir}/actual_fdr_input.xlsx"
     actual_fdr = f"{args.outdir}/actual_fdr.xlsx"
@@ -58,24 +60,35 @@ def main():
         "--output", decoy_library,
     ])
 
-    # 4. Run msSLASH using target library and decoy library separately
+    # 4. Combine target library + generated decoy library into one searchable library
+    # This combined library is used as -l in msSLASH.
+    run_command([
+        "python", "-m", "splisum.library.combine",
+        "merge-files",
+        "--inputs", args.input_library, decoy_library,
+        "--output", combined_library,
+    ])
+
+    # 5. Run msSLASH against combined target-decoy library
+    # msslash.py will automatically create dummy_decoy.mgf for the required -d argument.
     run_command([
         "python", "-m", "splisum.search.msslash",
         "--msslash_path", args.msslash_path,
-        "--library", args.input_library,
+        "--library", combined_library,
         "--query", args.query_mgf,
-        "--decoy", decoy_library,
         "--output", msslash_output,
     ])
 
-    # 5. Estimated FDR
+    # 6. Estimated FDR
     run_command([
         "python", "-m", "splisum.fdr.estimated",
         "--input", msslash_output,
         "--output", estimated_fdr,
     ])
 
-    # 6. Prepare actual FDR input
+    # 7. Prepare actual FDR input
+    # Use original target library here, not combined library, because structural validation
+    # should map target matches back to the real target library.
     run_command([
         "python", "-m", "splisum.fdr.prepare_actual_fdr_input",
         "--msslash_txt", msslash_output,
@@ -85,14 +98,14 @@ def main():
         "--output", actual_input,
     ])
 
-    # 7. Actual FDR
+    # 8. Actual FDR
     run_command([
         "python", "-m", "splisum.fdr.actual_fdr",
         "--input", actual_input,
         "--output", actual_fdr,
     ])
 
-    # 8. Compare estimated and actual FDR
+    # 9. Compare estimated and actual FDR
     run_command([
         "python", "-m", "splisum.postprocess.compare_fdr",
         "--estimated", estimated_fdr,
@@ -103,6 +116,7 @@ def main():
 
     print("\nSPLISUM workflow completed.")
     print(f"Results saved in: {args.outdir}")
+    print(f"Combined search library: {combined_library}")
 
 
 if __name__ == "__main__":
