@@ -253,7 +253,7 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 flowchart TD
 
 A[Raw MGF Library] --> B[Standardization]
-B --> C[Filtering: Ion Mode + 20 eV]
+B --> C[Filtering: Ion Mode and 20 eV]
 C --> D[50 ppm Binning]
 D --> E[msCRUSH Clustering]
 E --> F[Decoy Generation]
@@ -261,20 +261,20 @@ E --> F[Decoy Generation]
 C --> G[Target Library]
 F --> H[Decoy Library]
 
-G --> I[Combine Target + Decoy]
+G --> I[Combine Target and Decoy]
 H --> I
 
-I --> J[Combined Target-Decoy Library]
+I --> J[Combined Target Decoy Library]
 
 J --> K[msSLASH Search]
 L[Query MGF] --> K
 
 K --> M[Search Results]
 
-M --> N[Estimated FDR (#Decoy / #Target)]
+M --> N[Estimated FDR]
 M --> O[Prepare MCES Input]
 
-O --> P[Actual FDR (Not Identical / Total)]
+O --> P[Actual FDR]
 
 N --> Q[FDR Comparison]
 P --> Q
