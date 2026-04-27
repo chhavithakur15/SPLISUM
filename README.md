@@ -248,33 +248,31 @@ Estimated FDR is based on decoy matches, whereas actual FDR reflects structural 
 
 ## Pipeline
 
-Raw MGF Library  
-↓  
-MGF Standardization (PEPMASS, CHARGE, PRECURSOR)  
-↓  
-Filtering (Ion Mode + 20 eV)  
-↓  
-50 ppm Precursor Mass Binning  
-↓  
-msCRUSH Clustering  
-↓  
-Decoy Generation (Mass reshuffling across bins)  
+## Pipeline
 
-→ Target Library  
-→ Decoy Library  
+```mermaid
+flowchart TD
 
-↓  
-Combined Target–Decoy Library  
-↓  
-msSLASH Spectral Search (Query vs Combined Library)  
-↓  
-Search Results (TopMatch, TopScore, TopPep)  
+A[Raw MGF Library] --> B[MGF Standardization<br/>(PEPMASS, CHARGE, PRECURSOR TYPE)]
+B --> C[Filtering (Ion Mode + 20 eV)]
+C --> D[50 ppm Precursor Mass Binning]
+D --> E[msCRUSH Clustering]
+E --> F[Decoy Generation<br/>(Mass reshuffling across bins)]
 
-→ Estimated FDR (#Decoy / Target)  
-→ MCES Analysis (Edit Similarity)  
+F --> G[Target Library]
+F --> H[Decoy Library]
 
-↓  
-Actual FDR (Not Identical / Total)  
-↓  
-FDR Comparison (Estimated vs Actual)
+G --> I[Combined Target–Decoy Library]
+H --> I
+
+I --> J[msSLASH Spectral Search<br/>(Query vs Combined Library)]
+J --> K[Search Results<br/>(TopMatch, TopScore, TopPep)]
+
+K --> L[Estimated FDR<br/>(#Decoy / Target)]
+K --> M[MCES Analysis<br/>(Edit Similarity)]
+
+L --> N[Actual FDR<br/>(Not Identical / Total)]
+M --> N
+
+N --> O[FDR Comparison<br/>(Estimated vs Actual)]
 
