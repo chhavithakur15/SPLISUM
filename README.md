@@ -46,9 +46,8 @@ After installation, provide paths to executables:
 
 ---
 
-## Getting Started
-
-### Run the full pipeline
+## Quick Start
+Run the full pipeline
 
     python -m splisum.workflow.run_pipeline \
       --input_library input_library.mgf \
