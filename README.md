@@ -245,52 +245,53 @@ Estimated FDR < Actual FDR
 Estimated FDR is based on decoy matches, whereas actual FDR reflects structural correctness.
 
 ---
-## Pipeline
 
-```mermaid
-flowchart TD
-    A[Raw MGF]
-    B[Standardize]
-    C[Filter]
-    D[Bin 50 ppm]
-    E[msCRUSH]
-    F[Generate Decoys]
-    G[Target]
-    H[Decoy]
-    I[Combined Library]
-    J[msSLASH Search]
-    K[Results]
-    L[Estimated FDR]
-    M[MCES]
-    N[Actual FDR]
-    O[FDR Comparison]
 
-    A --> B --> C --> D --> E --> F
-    F --> G
-    F --> H
-    G --> I
-    H --> I
-    I --> J --> K
-    K --> L
-    K --> M
-    L --> N
-    M --> N
-    N --> O
-```
+<h2>Pipeline</h2>
 
-### Pipeline details
+<table>
+<tr><td align="center"><b>Raw MGF Library</b></td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>MGF Standardization</b><br>PEPMASS, CHARGE, PRECURSOR TYPE</td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>Filtering</b><br>Ion Mode + 20 eV</td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>50 ppm Precursor Mass Binning</b></td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>msCRUSH Clustering</b></td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>Decoy Generation</b><br>Mass reshuffling across bins</td></tr>
+<tr><td align="center">⬇</td></tr>
+</table>
 
-- **Raw MGF:** input spectral library
-- **Standardize:** PEPMASS, CHARGE, PRECURSOR TYPE
-- **Filter:** ion mode + 20 eV
-- **Bin 50 ppm:** precursor mass binning
-- **msCRUSH:** spectral clustering
-- **Generate Decoys:** mass reshuffling across bins
-- **Combined Library:** target + decoy library
-- **msSLASH Search:** query vs combined library
-- **Results:** TopMatch, TopScore, TopPep
-- **Estimated FDR:** decoy hits / target hits
-- **MCES:** edit similarity
-- **Actual FDR:** not identical / total
-- **FDR Comparison:** estimated vs actual
+<table>
+<tr>
+<td align="center"><b>Target Library</b></td>
+<td align="center"><b>Decoy Library</b></td>
+</tr>
+</table>
+
+<table>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>Combined Target-Decoy Library</b></td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>msSLASH Spectral Search</b><br>Query vs Combined Library</td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>Search Results</b><br>TopMatch, TopScore, TopPep</td></tr>
+<tr><td align="center">⬇</td></tr>
+</table>
+
+<table>
+<tr>
+<td align="center"><b>Estimated FDR</b><br>Decoy / Target</td>
+<td align="center"><b>MCES Analysis</b><br>Edit Similarity</td>
+</tr>
+</table>
+
+<table>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>Actual FDR</b><br>Not Identical / Total</td></tr>
+<tr><td align="center">⬇</td></tr>
+<tr><td align="center"><b>FDR Comparison</b><br>Estimated vs Actual</td></tr>
+</table>
 
